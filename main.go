@@ -1,11 +1,10 @@
 package main
 
 import (
+	"github.com/ErikPelli/PiSquared/PiSquared"
 	"github.com/joho/godotenv"
-	tb "gopkg.in/tucnak/telebot.v2"
 	"log"
 	"os"
-	"time"
 )
 
 func main() {
@@ -13,17 +12,11 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	bot, err := tb.NewBot(tb.Settings{
-		Token:  os.Getenv("BOT_TOKEN"),
-		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
-	})
+	bot, err := PiSquared.NewBot(os.Getenv("BOT_TOKEN"))
 	if err != nil {
-		log.Fatal("Error start bot using the bot token")
+		log.Fatal("Error create bot using the bot token")
 	}
 
-	bot.Handle("/start", func(m *tb.Message) {
-		bot.Send(m.Sender, "Welcome "+m.Chat.FirstName+"!")
-	})
-
+	bot.InitHandlers()
 	bot.Start()
 }
