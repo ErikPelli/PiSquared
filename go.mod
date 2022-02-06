@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/joho/godotenv v1.4.0
+	github.com/orcaman/concurrent-map v1.0.0
 	gopkg.in/tucnak/telebot.v2 v2.5.0
 )
 
