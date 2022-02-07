@@ -34,6 +34,12 @@ func (bot *Bot) InitHandlers() {
 		btnHis    = startMenu.Text("📜️ History")
 	)
 
+	startMenu.Reply(
+		startMenu.Row(btnCS),
+		startMenu.Row(btnGeo),
+		startMenu.Row(btnHis),
+	)
+
 	bot.Handle(&btnCS, func(m *tb.Message) {
 		bot.handleSubject(m.Sender, computerScience)
 	})
