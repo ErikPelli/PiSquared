@@ -13,11 +13,24 @@ const (
 type subject int
 
 const (
-	math subject = iota
-	computerScience
+	computerScience subject = iota
 	geography
 	history
 )
+
+// String returns string representation of current subject.
+func (s subject) String() string {
+	switch s {
+	case computerScience:
+		return "Computer Science"
+	case geography:
+		return "Geography"
+	case history:
+		return "History"
+	default:
+		return ""
+	}
+}
 
 // user contains current status of the user saved in memory
 // and the answer expected if a question is pending.
