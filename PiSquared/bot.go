@@ -58,6 +58,28 @@ func (bot *Bot) InitHandlers() {
 		bot.mem.Set(chatId, user{s: startMessage})
 	})
 
+	bot.Handle("/next", func(m *tb.Message) {
+		chatId := strconv.FormatInt(m.Sender.ID, 10)
+		u, ok := bot.mem.Get(chatId)
+		if !ok {
+			return
+		}
+		userData := u.(user)
+		if userData.s != subjectSelected && userData.s != waitingResponseFromUser {
+			return
+		}
+
+		question, answer := getQuestion(userData.sub)
+		bot.Send(m.Sender, "Your question: "+question+"\n\nSend your answer or skip using /next.", tb.ReplyMarkup{ReplyKeyboardRemove: true})
+
+		bot.mem.Set(chatId, user{
+			s:                waitingResponseFromUser,
+			sub:              userData.sub,
+			lastQuizQuestion: question,
+			rightAnswer:      answer,
+		})
+	})
+
 	bot.Handle(tb.OnText, func(m *tb.Message) {
 	})
 }
