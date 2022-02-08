@@ -25,7 +25,6 @@ func LoadQuestions(jsonData []byte) error {
 // getQuestions returns a new question.
 // First returned variable is the question and the second is the answer.
 func getQuestion(s subject) Question {
-	// TODO
 	var q []Question
 	switch s {
 	case computerScience:

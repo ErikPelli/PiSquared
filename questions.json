@@ -1,0 +1,72 @@
+{
+  "computerScience":[
+    {
+      "question": "What is a constructor?",
+      "answer": "A constructor is a method that is used to create a class object"
+    },
+    {
+      "question": "What is the operating system?",
+      "answer": "Operating system is a software that acts as an interface between the end user and computer hardware"
+    },
+    {
+      "question": "What does the acronym JVM mean?",
+      "answer": "It's Java Virtual Machine"
+    },
+    {
+      "question": "What is a palindrome string?",
+      "answer": "A palindrome string is a string that if inverted remains the same"
+    },
+    {
+      "question": "What do you mean by \"beta version\" of a computer program?",
+      "answer": "The beta version of a computer program or software is a release of the same that isn’t yet ready for public release and is meant to be modified after user feedback received from beta testing"
+    },
+    {
+      "question": "What is a recursive function?",
+      "answer": "A function that calls itself is called a recursive function"
+    },
+    {
+      "question": "What is a compiler?",
+      "answer": "A compiler is a computer program that translates written code in one high level programming language into a lower level programming language such as Assembly"
+    }
+  ],
+  "geography":[
+    {
+      "question": "Which is the largest desert in the world?",
+      "answer": "It's the Sahara Desert"
+    },
+    {
+      "question": "Which country has the highest population?",
+      "answer": "China"
+    },
+    {
+      "question": "Which is the longest river in the world and where is it?",
+      "answer": "It's the Nile and it's in Egypt"
+    },
+    {
+      "question": "Which is the world’s smallest country?",
+      "answer": "China"
+    },
+    {
+      "question": "Which is the tallest mountain in the world?",
+      "answer": "Mount Everest"
+    }
+  ],
+  "history":[
+    {
+      "question": "Who was the biggest loser of World War II and who was its leader?",
+      "answer": "It was the Germany and its leader was Hitler"
+    },
+    {
+      "question": "Who is the most famous French dictator and where was he born?",
+      "answer": "He is Napoleone and he was born in Corsica"
+    },
+    {
+      "question": "What is Italy's form of government?",
+      "answer": "Democratic parliamentary republic"
+    },
+    {
+      "question": "What was the people who dominated the Mediterranean in the period in which Jesus lived?",
+      "answer": "The ancient Romans, who had Roma as their capital"
+    }
+  ]
+}

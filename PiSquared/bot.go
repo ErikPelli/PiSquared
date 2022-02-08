@@ -90,7 +90,7 @@ func (bot *Bot) InitHandlers() {
 		if !ok || userData.s != waitingResponseFromUser {
 			return
 		}
-		percentage := evalAnswer(userData.lastQuizQuestion, m.Text)
+		percentage := evalAnswer(userData.rightAnswer, m.Text)
 		status := "🔴 Your answer is wrong"
 		if percentage >= 75 {
 			status = "\U0001F7E2 Your answer is correct"
