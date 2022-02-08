@@ -22,9 +22,9 @@ func main() {
 		log.Fatal("Error parsing questions file")
 	}
 
-	bot, err := PiSquared.NewBot(os.Getenv("BOT_TOKEN"))
+	bot, err := PiSquared.NewBot(os.Getenv("BOT_TOKEN"), os.Getenv("SQLITE_DB"))
 	if err != nil {
-		log.Fatal("Error create bot using the bot token")
+		log.Fatal("Error create bot using the bot token and the database")
 	}
 
 	bot.InitHandlers()

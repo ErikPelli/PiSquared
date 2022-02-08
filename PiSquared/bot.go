@@ -1,18 +1,19 @@
 package PiSquared
 
 import (
-	cmap "github.com/orcaman/concurrent-map"
 	tb "gopkg.in/tucnak/telebot.v2"
-	"strconv"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"time"
 )
 
 type Bot struct {
-	mem cmap.ConcurrentMap // mem is the association between user chat id (key) and its status (value).
+	db *gorm.DB
 	*tb.Bot
 }
 
-func NewBot(token string) (Bot, error) {
+func NewBot(token, db string) (Bot, error) {
 	bot := Bot{}
 	var err error
 
@@ -21,12 +22,17 @@ func NewBot(token string) (Bot, error) {
 		Poller: &tb.LongPoller{Timeout: 10 * time.Second},
 	})
 
+	if err != nil {
+		return bot, err
+	}
+
+	bot.db, err = gorm.Open(sqlite.Open(db), &gorm.Config{})
+	bot.db.AutoMigrate(&User{})
+
 	return bot, err
 }
 
 func (bot *Bot) InitHandlers() {
-	bot.mem = cmap.New()
-
 	var (
 		startMenu = &tb.ReplyMarkup{ResizeReplyKeyboard: true}
 		btnCS     = startMenu.Text("🖥️ Computer Science")
@@ -54,61 +60,57 @@ func (bot *Bot) InitHandlers() {
 
 	bot.Handle("/start", func(m *tb.Message) {
 		bot.Send(m.Sender, "Welcome "+m.Chat.FirstName+"!\n\n📚 Select the school subject from the menu.", startMenu)
-		chatId := strconv.FormatInt(m.Sender.ID, 10)
-		bot.mem.Set(chatId, user{s: startMessage})
-	})
-
-	getUser := func(m *tb.Message) (string, user, bool) {
-		chatId := strconv.FormatInt(m.Sender.ID, 10)
-		u, ok := bot.mem.Get(chatId)
-		currentUser := user{}
-		if ok {
-			currentUser = u.(user)
-		}
-		return chatId, currentUser, ok
-	}
-
-	bot.Handle("/next", func(m *tb.Message) {
-		chatId, userData, ok := getUser(m)
-		if ok && userData.s != subjectSelected && userData.s != waitingResponseFromUser {
-			return
-		}
-
-		question := getQuestion(userData.sub)
-		bot.Send(m.Sender, "Your question: "+question.Question+"\n\nSend your answer or skip using /next.", &tb.ReplyMarkup{ReplyKeyboardRemove: true})
-
-		bot.mem.Set(chatId, user{
-			s:                waitingResponseFromUser,
-			sub:              userData.sub,
-			lastQuizQuestion: question.Question,
-			rightAnswer:      question.Answer,
+		bot.db.Clauses(clause.OnConflict{
+			UpdateAll: true,
+		}).Create(&User{
+			ChatID: m.Sender.ID,
+			S:      startMessage,
 		})
 	})
 
-	bot.Handle(tb.OnText, func(m *tb.Message) {
-		chatId, userData, ok := getUser(m)
-		if !ok || userData.s != waitingResponseFromUser {
+	getUser := func(m *tb.Message) (User, error) {
+		var user User
+		result := bot.db.First(&user, m.Sender.ID)
+		return user, result.Error
+	}
+
+	bot.Handle("/next", func(m *tb.Message) {
+		userData, err := getUser(m)
+		if err != nil || userData.S == startMessage {
 			return
 		}
-		percentage := evalAnswer(userData.rightAnswer, m.Text)
+
+		question := getQuestion(userData.Sub)
+		bot.Send(m.Sender, "Your question: "+question.Question+"\n\nSend your answer or skip using /next.", &tb.ReplyMarkup{ReplyKeyboardRemove: true})
+
+		userData.S = waitingResponseFromUser
+		userData.LastQuizQuestion = question.Question
+		userData.RightAnswer = question.Answer
+		bot.db.Save(&userData)
+	})
+
+	bot.Handle(tb.OnText, func(m *tb.Message) {
+		userData, err := getUser(m)
+		if err != nil || userData.S != waitingResponseFromUser {
+			return
+		}
+
+		percentage := evalAnswer(userData.RightAnswer, m.Text)
 		status := "🔴 Your answer is wrong"
 		if percentage >= 75 {
 			status = "\U0001F7E2 Your answer is correct"
 		} else if percentage >= 50 {
 			status = "\U0001F7E1 Your answer is partially correct"
 		}
+
 		bot.Send(m.Sender, status)
-		userData.s = subjectSelected
-		bot.mem.Set(chatId, userData)
+		userData.S = subjectSelected
+		bot.db.Save(&userData)
 	})
 }
 
 func (bot *Bot) handleSubject(u *tb.User, s subject) {
 	bot.Send(u, "✅ The \""+s.String()+"\" school subject has been set.")
-	chatId := strconv.FormatInt(u.ID, 10)
-	bot.mem.Set(chatId, user{
-		s:   subjectSelected,
-		sub: s,
-	})
+	bot.db.Model(&User{ChatID: u.ID}).Updates(User{S: subjectSelected, Sub: s})
 	bot.Send(u, "Get a new question using /next.")
 }
