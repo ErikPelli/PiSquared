@@ -58,29 +58,48 @@ func (bot *Bot) InitHandlers() {
 		bot.mem.Set(chatId, user{s: startMessage})
 	})
 
-	bot.Handle("/next", func(m *tb.Message) {
+	getUser := func(m *tb.Message) (string, user, bool) {
 		chatId := strconv.FormatInt(m.Sender.ID, 10)
 		u, ok := bot.mem.Get(chatId)
-		if !ok {
-			return
+		currentUser := user{}
+		if ok {
+			currentUser = u.(user)
 		}
-		userData := u.(user)
-		if userData.s != subjectSelected && userData.s != waitingResponseFromUser {
+		return chatId, currentUser, ok
+	}
+
+	bot.Handle("/next", func(m *tb.Message) {
+		chatId, userData, ok := getUser(m)
+		if ok && userData.s != subjectSelected && userData.s != waitingResponseFromUser {
 			return
 		}
 
-		question, answer := getQuestion(userData.sub)
-		bot.Send(m.Sender, "Your question: "+question+"\n\nSend your answer or skip using /next.", tb.ReplyMarkup{ReplyKeyboardRemove: true})
+		question := getQuestion(userData.sub)
+		bot.Send(m.Sender, "Your question: "+question.Question+"\n\nSend your answer or skip using /next.", &tb.ReplyMarkup{ReplyKeyboardRemove: true})
 
 		bot.mem.Set(chatId, user{
 			s:                waitingResponseFromUser,
 			sub:              userData.sub,
-			lastQuizQuestion: question,
-			rightAnswer:      answer,
+			lastQuizQuestion: question.Question,
+			rightAnswer:      question.Answer,
 		})
 	})
 
 	bot.Handle(tb.OnText, func(m *tb.Message) {
+		chatId, userData, ok := getUser(m)
+		if !ok || userData.s != waitingResponseFromUser {
+			return
+		}
+		percentage := evalAnswer(userData.lastQuizQuestion, m.Text)
+		status := "🔴 Your answer is wrong"
+		if percentage >= 75 {
+			status = "\U0001F7E2 Your answer is correct"
+		} else if percentage >= 50 {
+			status = "\U0001F7E1 Your answer is partially correct"
+		}
+		bot.Send(m.Sender, status)
+		userData.s = subjectSelected
+		bot.mem.Set(chatId, userData)
 	})
 }
 
