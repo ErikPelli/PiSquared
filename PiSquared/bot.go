@@ -96,11 +96,13 @@ func (bot *Bot) InitHandlers() {
 		}
 
 		percentage := evalAnswer(userData.RightAnswer, m.Text)
-		status := "🔴 Your answer is wrong"
+		var status string
 		if percentage >= 75 {
 			status = "\U0001F7E2 Your answer is correct"
 		} else if percentage >= 50 {
 			status = "\U0001F7E1 Your answer is partially correct"
+		} else {
+			status = "🔴 Your answer is wrong"
 		}
 
 		bot.Send(m.Sender, status)
