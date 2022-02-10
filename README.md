@@ -10,14 +10,18 @@ you can compile it using the instructions of original repository.
 The total folder size will be around 5GB, but you can delete the pytorch_model.bin file to save 1.8GB with no problem.
 
 ### Download model using Windows
+```
 cd folderOfPiSquared
 hf-importer-win64 --repo=models --model=pvl/labse_bert
+```
 
 ### Download model using Linux
+```
 cd folderOfPiSquared
 hf-importer-linux64 --repo=models --model=pvl/labse_bert
+```
 
-## Issues with Windows
+### Issues with Windows 11
 I tested it using Windows and spago says that the OS doesn't support read only files.
 I didn't find the solution so if you know how to resolve it, please open an issue.
 
