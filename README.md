@@ -25,10 +25,10 @@ I didn't find the solution so if you know how to resolve it, please open an issu
 Rename .env.example to .env
 
 Fill the required fields:
-* BOT_TOKEN is the Telegram token obtained by [BotFather](https://t.me/BotFather)
-* QUESTIONS_FILE is the file that contains the questions and the answers for each subject
-* SQLITE_DB is the SQLITE database file, and can be a path to a file or `file::memory:?cache=shared` for a temporary in memory database
-* MODEL_FOLDER is the folder that contains the NPL model to check the answers
+- BOT_TOKEN is the Telegram token obtained by [BotFather](https://t.me/BotFather)
+- QUESTIONS_FILE is the file that contains the questions and the answers for each subject
+- SQLITE_DB is the SQLITE database file, and can be a path to a file or `file::memory:?cache=shared` for a temporary in memory database
+- MODEL_FOLDER is the folder that contains the NPL model to check the answers
 
 ## Build this bot
 Download Go compiler using a package manager (apt, snap, ecc) or from the [Go website](https://go.dev/dl/).
@@ -37,3 +37,9 @@ Then use this command in the project folder to compile without debug symbols and
 go build -ldflags "-s -w"
 ```
 An executable file will be built and the settings are in the .env file.
+
+## Thanks
+- [SpaGO](https://github.com/nlpodyssey/spago), the ML/NPL library that processes the user answer
+- [Gophercon SpaGO examples](https://github.com/matteo-grella/gophercon-eu-2021), that provides some useful examples to use SpaGO
+- [Telebot](https://github.com/tucnak/telebot), a bot framework that this project use to connect with Telegram
+- [Gorm](https://github.com/go-gorm/gorm), an ORM that abstracts SQL queries using Go data types
