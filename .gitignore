@@ -9,6 +9,7 @@
 .idea
 .env
 *.db
+models
 
 # Test binary, built with `go test -c`
 *.test
