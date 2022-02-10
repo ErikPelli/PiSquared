@@ -1,4 +1,4 @@
-package PiSquared
+package src
 
 import (
 	"gorm.io/gorm"

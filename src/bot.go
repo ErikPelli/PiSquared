@@ -1,10 +1,11 @@
-package PiSquared
+package src
 
 import (
 	tb "gopkg.in/tucnak/telebot.v2"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"strconv"
 	"time"
 )
 
@@ -94,16 +95,17 @@ func (bot *Bot) InitHandlers() {
 		if err != nil || userData.S != waitingResponseFromUser {
 			return
 		}
-
 		percentage := evalAnswer(userData.RightAnswer, m.Text)
+
 		var status string
-		if percentage >= 75 {
+		if percentage >= 68 {
 			status = "\U0001F7E2 Your answer is correct"
 		} else if percentage >= 50 {
 			status = "\U0001F7E1 Your answer is partially correct"
 		} else {
 			status = "🔴 Your answer is wrong"
 		}
+		status += " (" + strconv.FormatFloat(float64(percentage), 'f', -1, 64) + "%)"
 
 		bot.Send(m.Sender, status)
 		userData.S = subjectSelected

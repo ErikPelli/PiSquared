@@ -1,4 +1,4 @@
-package PiSquared
+package src
 
 import (
 	"encoding/json"
@@ -43,8 +43,7 @@ func getQuestion(s subject) Question {
 }
 
 // Attribute a percentage score to the User answer.
-// From 0 to 100%.
-func evalAnswer(question, answer string) float32 {
-	// TODO
-	return 50
+// From 0 to ~100%.
+func evalAnswer(rightAnswer, userAnswer string) float32 {
+	return dotProduct(vectorize(rightAnswer), vectorize(userAnswer)) * 100
 }
