@@ -100,12 +100,12 @@ func (bot *Bot) InitHandlers() {
 		var status string
 		if percentage >= 68 {
 			status = "\U0001F7E2 Your answer is correct"
-		} else if percentage >= 50 {
+		} else if percentage >= 48 {
 			status = "\U0001F7E1 Your answer is partially correct"
 		} else {
 			status = "🔴 Your answer is wrong"
 		}
-		status += " (" + strconv.FormatFloat(float64(percentage), 'f', -1, 64) + "%)"
+		status += " (" + strconv.Itoa(int(percentage)) + "%)"
 
 		bot.Send(m.Sender, status)
 		userData.S = subjectSelected
