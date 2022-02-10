@@ -22,7 +22,7 @@
     },
     {
       "question": "What is a recursive function?",
-      "answer": "A function that calls itself is called a recursive function"
+      "answer": "A function that calls itself"
     },
     {
       "question": "What is a compiler?",
