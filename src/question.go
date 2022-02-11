@@ -63,7 +63,11 @@ func getQuestion(s subject) Question {
 }
 
 // Attribute a percentage score to the User answer.
-// From 0 to ~100%.
+// From 0 to 100%.
 func evalAnswer(rightAnswer, userAnswer string) float32 {
-	return dotProduct(vectorize(rightAnswer), vectorize(userAnswer)) * 100
+	value := dotProduct(vector(rightAnswer), vector(userAnswer))
+	if value > 1 {
+		value = 1
+	}
+	return value * 100
 }

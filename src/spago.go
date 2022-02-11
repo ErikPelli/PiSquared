@@ -29,9 +29,10 @@ import (
 var model *bert.Model
 
 // LoadModel loads NPL BERT model in memory
-func LoadModel(folder string) (err error) {
+func LoadModel(folder string) error {
+	var err error
 	model, err = bert.LoadModel(folder)
-	return
+	return err
 }
 
 // CloseModel closes BERT model
@@ -39,7 +40,7 @@ func CloseModel() {
 	model.Close()
 }
 
-func vectorize(text string) []float32 {
+func vector(text string) []float32 {
 	vector, err := model.Vectorize(text, bert.ClsToken)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +49,7 @@ func vectorize(text string) []float32 {
 }
 
 func dotProduct(v1, v2 []float32) float32 {
-	var s float32 = 0
+	s := float32(0)
 	_ = v2[len(v1)-1] // avoid bounds check
 	for i, a := range v1 {
 		s += a * v2[i]
