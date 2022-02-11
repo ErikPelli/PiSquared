@@ -1,5 +1,6 @@
 # PiSquared
-A Telegram bot that answer you a question and evaluate the response you provide.
+A Telegram bot that asks you a question and evaluate the response you provide.
+
 Thanks to the labse_bert model, the evaluation of the answer is multilingual, so you can write the answer in your language and it will be checked correctly.
 
 ![Bot question example](/../photo/answer_example.png?raw=true "Bot question example")
