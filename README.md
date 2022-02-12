@@ -19,7 +19,8 @@ hf-importer-win64 --repo=models --model=pvl/labse_bert
 ### Download model using Linux
 ```
 cd folderOfPiSquared
-hf-importer-linux64 --repo=models --model=pvl/labse_bert
+chmod +x hf-importer-linux64
+./hf-importer-linux64 --repo=models --model=pvl/labse_bert
 ```
 
 ### Issues with Windows 11
