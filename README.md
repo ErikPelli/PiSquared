@@ -45,7 +45,7 @@ go build -ldflags "-s -w"
 An executable file will be built and the settings are in the .env file.
 
 ## Thanks
-- [SpaGO](https://github.com/nlpodyssey/spago), the ML/NPL library that processes the user answer
-- [Gophercon SpaGO examples](https://github.com/matteo-grella/gophercon-eu-2021), that provides some useful examples to use SpaGO
-- [Telebot](https://github.com/tucnak/telebot), a bot framework that this project use to connect with Telegram
+- [SpaGO](https://github.com/nlpodyssey/spago), the ML/NLP library that processes the user answer
+- [Gophercon SpaGO examples](https://github.com/matteo-grella/gophercon-eu-2021), which provides some useful examples to use SpaGO
+- [Telebot](https://github.com/tucnak/telebot), a bot framework that this project uses to connect with Telegram
 - [Gorm](https://github.com/go-gorm/gorm), an ORM that abstracts SQL queries using Go data types
